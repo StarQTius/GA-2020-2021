@@ -49,7 +49,7 @@ public:
 
     return Setpoint {
       .speed = 1.0_q_m_per_s * std::pow(move, 63),
-      .angular_speed = 1.0_q_rad_per_s * std::pow(turn_right - turn_left, 63)
+      .angular_speed = 1.0_q_rad_per_s * (turn_right - turn_left)
     };
   };
 

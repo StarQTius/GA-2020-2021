@@ -61,10 +61,10 @@ int main() {
   using std::ranges::begin;
 
   //
-  auto batch = make_batch(100, 15,
+  auto batch = make_batch(50, 15,
     sin_delta,
     cos_delta,
-    speed,
+    //speed,
     distance_to_goal,
     //x_position,
     //y_position,
@@ -88,25 +88,40 @@ int main() {
   };
 
   //
+  int64_t seeds[10];
   auto fitness_ftor = [&](auto& candidate) {
     auto features = neural_features;
     features.strategy_ftor = candidate;
-    auto results = perform_trial(parameters, features, features);
-    std::wcout << (results.outcome == Outcome::goal_reached ? "#" : ".") << std::flush;
-    return -results.best_distance.count() - results.time.count();
+    double fitness = 0;
+    size_t nb_sucess = 0;
+
+    for (size_t i = 0; i < 10; i++) {
+      parameters.seed = seeds[i];
+      auto results = perform_trial(parameters, features, features);
+      fitness -= results.best_distance.count() + results.time.count();
+      nb_sucess += results.outcome == Outcome::goal_reached;
+    }
+
+    if (nb_sucess < 10){
+      std::wcout << nb_sucess << std::flush;
+    } else {
+      std::wcout << "@" << std::flush;
+    }
+
+    return fitness;
   };
 
   //
   std::mt19937             rnd_engine(generate_seed());
   std::normal_distribution make_noise(0.0, 1.0);
-  int elitism = 15;
+  int                      elitism = 15;
 
   auto best_features = neural_features;
   for (auto& candidate : batch)
     mutate(candidate.view(), 1.0, [&](auto& value, auto& rnd_engine) { value = make_noise(rnd_engine); });
 
   for (int i = 0; i < 100; i++) {
-    parameters.seed = generate_seed();
+    ltl::for_each(seeds, [](auto& x) { x = generate_seed(); });
 
     std::wcout << std::wstring(elitism, 'v') << std::endl;
     auto fitnesses = sort_candidates(batch, fitness_ftor);

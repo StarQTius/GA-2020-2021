@@ -42,16 +42,15 @@ entt::entity create_robot(entt::registry& registry,
 
   // Créer les plus simples composants du robot
   auto entity = registry.create();
-  registry.emplace<Position>(entity, position_picker(rnd_engine));
+  registry.emplace<Position>(entity, 0_q_m, 0_q_m);
   registry.emplace<physics::speed>(entity, 0);
-  registry.emplace<physics::angle>(entity, angle_picker(rnd_engine));
   registry.emplace<physics::angular_speed>(entity, 0);
   registry.emplace<Hitbox>(entity, hitbox);
   registry.emplace<Strategy>(entity, strategy_ftor);
 
   // Créer une tâche pour le robot
   auto task_entity = registry.create();
-  registry.emplace<Position>(task_entity, position_picker(rnd_engine));
+  registry.emplace<Position>(task_entity, 3_q_m, 3_q_m );
   registry.emplace<Task>(entity, task_entity, registry);
 
   // Créer des composants graphiques si besoin
@@ -59,6 +58,10 @@ entt::entity create_robot(entt::registry& registry,
     registry.emplace<ShapePtr>(task_entity, new auto(goal_mark_shape));
     registry.emplace<ShapePtr>(entity, new auto(shape));
   }
+
+  registry.emplace<physics::angle>(entity, atan(registry.get<Position>(task_entity) - registry.get<Position>(entity)));
+  normal_distribution make_noise(0.0_q_m, 1.0_q_m);
+  registry.get<Position>(task_entity) += { .x = make_noise(rnd_engine), .y = make_noise(rnd_engine) };
 
   return entity;
 }
