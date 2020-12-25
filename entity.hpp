@@ -1,10 +1,10 @@
 #ifndef GATE_ENTITY_HPP
   #define GATE_ENTITY_HPP
 
-  #include <exception> //exception
-  #include <list> //list
-  #include <memory> //shared_ptr
-  #include <utility> //forward
+  #include <exception>
+  #include <list>
+  #include <memory>
+  #include <utility>
 
   #include <SFML/Graphics.hpp>
 

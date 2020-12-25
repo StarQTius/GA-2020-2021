@@ -13,6 +13,9 @@ TEST_CASE("gate::NeuralNetwork"){
     std::uniform_real_distribution{-1.0, 1.0},
     [](float x){
       return 1 / (1 + std::exp(-x));
+    },
+    [](float x){
+      return 1 / (1 + std::exp(-x));
     }
   };
 
@@ -44,6 +47,9 @@ TEST_CASE("gate::NeuralNetwork"){
   gate::NeuralNetwork def_network{
     {3, 3, 3},
     std::uniform_real_distribution{-1.0, 1.0},
+    [](float x){
+      return x;
+    },
     [](float x){
       return x;
     }

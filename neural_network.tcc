@@ -9,13 +9,18 @@
       -act_ftor : fonction d'activation (qui peut être foncteur)
 **/
 
-template<typename ActivationFunctor>
-template<typename RandomDistribution>
-gate::NeuralNetwork<ActivationFunctor>::NeuralNetwork(
+template<
+  typename RandomDistribution,
+  typename ActivationFunctor,
+  typename LastActivationFunctor
+>
+gate::NeuralNetwork::NeuralNetwork(
   const std::list<gate::layer_size>& layer_sz_l,
   RandomDistribution&&               rnd_distr,
-  ActivationFunctor&&                act_ftor):
-  act_ftor{std::forward<ActivationFunctor>(act_ftor)}
+  ActivationFunctor&&                act_ftor,
+  LastActivationFunctor&&            last_act_ftor):
+  act_ftor{std::forward<ActivationFunctor>(act_ftor)},
+  last_act_ftor{std::forward<LastActivationFunctor>(last_act_ftor)}
 {
   if(layer_sz_l.empty())
     throw empty_layer_size_list{};
@@ -41,8 +46,7 @@ gate::NeuralNetwork<ActivationFunctor>::NeuralNetwork(
   +retourne le vecteur représentant la couche de sortie
 **/
 
-template<typename ActivationFunctor>
-gate::Vector gate::NeuralNetwork<ActivationFunctor>
+gate::Vector gate::NeuralNetwork
 ::operator()(const Vector& input_vect) const
 {
   Vector output_vect = input_vect;
@@ -52,7 +56,7 @@ gate::Vector gate::NeuralNetwork<ActivationFunctor>
       output_vect.begin(),
       output_vect.end(),
       output_vect.begin(),
-      act_ftor
+      it == neural_map.end() - 1 ? last_act_ftor : act_ftor
     );
   }
 

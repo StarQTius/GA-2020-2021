@@ -1,6 +1,6 @@
 COMPILER_FLAG = \
   -Wall \
-  -std=c++17 \
+  -std=c++20 \
   -ggdb
 
 SFML_LIB = \

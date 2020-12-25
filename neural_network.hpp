@@ -3,6 +3,7 @@
 
   #include <chrono>
   #include <exception>
+  #include <functional>
   #include <list>
   #include <utility> //pair
   #include <vector>
@@ -48,19 +49,24 @@
       NeuralNetwork : structure principale du fichier
     */
 
-    template<typename ActivationFunctor>
     struct NeuralNetwork{
 
-      template<typename RandomDistribution>
+      template<
+        typename RandomDistribution,
+        typename ActivationFunctor,
+        typename LastActivationFunctor
+      >
       NeuralNetwork(
         const std::list<layer_size>&,
         RandomDistribution&&,
-        ActivationFunctor&&);
+        ActivationFunctor&&,
+        LastActivationFunctor&&);
 
       Vector operator()(const Vector&) const;
 
-      NeuralMap         neural_map;
-      ActivationFunctor act_ftor;
+      NeuralMap                     neural_map;
+      std::function<scalar(scalar)> act_ftor;
+      std::function<scalar(scalar)> last_act_ftor;
 
     };
 
