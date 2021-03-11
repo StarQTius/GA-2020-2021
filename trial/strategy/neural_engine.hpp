@@ -6,9 +6,9 @@
 
 #include <entt/entt.hpp>
 
-#include <ltl/functional.h>
-#include <ltl/Range/enumerate.h>
-#include <ltl/Tuple.h>
+#include "ltl/functional.h"
+#include "ltl/Range/enumerate.h"
+#include "ltl/Tuple.h"
 
 #include "../../neural/net.hpp"
 #include "../../neural/static_perceptron.hpp"
@@ -48,8 +48,8 @@ public:
     auto turn_right = output[2];
 
     return Setpoint {
-      .speed = 1.0_q_m_per_s * std::pow(move, 63),
-      .angular_speed = 1.0_q_rad_per_s * (turn_right - turn_left)
+      .speed = 2.0_q_m_per_s * std::min(move, 0.5),
+      .angular_speed = 6.0_q_rad_per_s * (turn_right - turn_left)
     };
   };
 

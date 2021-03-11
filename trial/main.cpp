@@ -1,12 +1,13 @@
 #include <iostream>
+#include <fstream>
 #include <random>
 #include <vector>
 
-#include <ltl/algos.h>
-#include <ltl/Range/Value.h>
+#include "ltl/algos.h"
+#include "ltl/algos.h"
 
 #include "../genetics/genetics.hpp"
-#include "trial.hpp"
+#include "metrics/measure_accuracy.hpp"
 #include "strategy/neural_engine.hpp"
 #include "math.hpp"
 #include "physics.hpp"
@@ -70,17 +71,13 @@ int main() {
     //y_position,
     bias);
   RobotFeatures neural_features {
-    .hitbox { .radius = 10_q_cm },
+    .hitbox {10_q_cm},
     .strategy_ftor = NeuralEngine(0),
     .shape = sf::CircleShape(physics::cast_for_display(10_q_cm)),
     .goal_mark_shape = sf::CircleShape(physics::cast_for_display(5_q_cm))
   };
   TrialParameters parameters {
-    .playground {
-      .left = 0_q_m,
-      .top = 0_q_m,
-      .width = 5_q_m,
-      .height = 5_q_m },
+    .playground {0_q_m, 0_q_m, 5_q_m, 5_q_m },
     .foe_nb = 0,
     .seed = 1337,
     .dt = 0.1_q_s,
@@ -117,8 +114,9 @@ int main() {
   int                      elitism = 15;
 
   auto best_features = neural_features;
-  for (auto& candidate : batch)
+  for (auto& candidate : batch) {
     mutate(candidate.view(), 1.0, [&](auto& value, auto& rnd_engine) { value = make_noise(rnd_engine); });
+  }
 
   for (int i = 0; i < 100; i++) {
     ltl::for_each(seeds, [](auto& x) { x = generate_seed(); });
@@ -144,6 +142,10 @@ int main() {
       mutate(candidate.view(), 0.001, [&](auto& value, auto& rnd_engine) { value = make_noise(rnd_engine); });
     }
   }
+
+  std::ofstream log("log.txt");
+  neural_features.strategy_ftor = batch.front();
+  measure_accuracy(1e4, parameters, neural_features, neural_features, log);
 
   std::wstring answer, yes(L"o"), no(L"n");
   std::wcout << "Faire une démonstration ?" << std::endl;

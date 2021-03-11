@@ -8,4 +8,4 @@ debug: main.cpp
 	gcc $(flags) -ggdb $^ $(libs) -lsfml-graphics-d -lsfml-window-d -lsfml-system-d -o debug
 
 release: main.cpp
-	gcc $(flags) $^ $(libs) -lsfml-graphics -lsfml-window -lsfml-system -o release
+	gcc $(flags) $^ $(libs) -Ilib/Little-Type-Library/include/ -lsfml-graphics -lsfml-window -lsfml-system -o release

@@ -5,7 +5,7 @@
 
 #include <boost/callable_traits/return_type.hpp>
 
-#include <ltl/algos.h>
+#include "ltl/algos.h"
 
 #include "linear.hpp"
 

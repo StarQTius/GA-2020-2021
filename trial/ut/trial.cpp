@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-#include <ltl/algos.h>
-#include <ltl/Range/Filter.h>
+#include "ltl/algos.h"
+#include "ltl/Range/Filter.h"
 
 auto get_delta(entt::entity entity, entt::registry& registry, const Position& translation) {
   auto direction = registry.get<physics::angle>(entity);

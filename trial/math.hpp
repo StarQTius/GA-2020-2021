@@ -10,8 +10,6 @@
 /*******************************************************************************
 *******************************************************************************/
 
-namespace {
-
 using namespace units;
 
 auto norm2(const sf::Vector2<Quantity auto>& vector) {
@@ -39,4 +37,12 @@ auto fmod(Q lhs, Quantity auto rhs) {
   return Q(std::fmod(lhs.count(), quantity_cast<Q>(rhs).count()));
 }
 
-} //namespace
+template<Quantity Q>
+auto min(Q lhs, Q rhs) {
+  return lhs < rhs ? lhs : rhs;
+}
+
+template<Quantity Q>
+auto max(Q lhs, Q rhs) {
+  return lhs > rhs ? lhs : rhs;
+}

@@ -27,7 +27,6 @@
 
 //Doit être en dehors du namespace pour les UDLs
 using namespace units::physical::si::literals;
-using namespace units::physical::si::cgs::literals;
 
 namespace physics {
 
@@ -68,8 +67,8 @@ constexpr auto cast_for_display(Angle auto theta) {
 
 auto cast_for_display(const sf::Vector2<Quantity auto>& vector) {
   return sf::Vector2 {
-    .x = cast_for_display(vector.x),
-    .y = cast_for_display(vector.y)
+    cast_for_display(vector.x),
+    cast_for_display(vector.y)
   };
 }
 

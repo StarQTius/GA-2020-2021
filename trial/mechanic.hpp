@@ -18,12 +18,12 @@
 auto create_playground_sprite(entt::registry& registry) {
   auto entity = registry.create();
   const auto& playground = registry.ctx<TrialParameters>().playground;
-  Position position { .x = playground.left, .y = playground.top };
-  Position size { .x = playground.width, .y = playground.height };
+  Position position{playground.left, playground.top};
+  Position size{playground.width, playground.height};
 
   sf::RectangleShape playground_sprite(physics::cast_for_display(size));
   playground_sprite.setPosition(physics::cast_for_display(position));
-  playground_sprite.setFillColor({.r = 0, .b = 0, .g = 0, .a = 0});
+  playground_sprite.setFillColor({0, 0, 0, 0});
   playground_sprite.setOutlineColor(sf::Color::White);
   playground_sprite.setOutlineThickness(5);
   registry.emplace<ShapePtr>(entity, new sf::RectangleShape(playground_sprite));
@@ -48,12 +48,12 @@ void update_positions(entt::registry& registry) {
   auto dt = registry.ctx<TrialParameters>().dt;
   for (auto&& [entity, position, hitbox, direction, speed, angular_speed] : bodies.each()) {
     position.x += speed * dt * cos(direction);
-    //position.x = std::max(playground.left + hitbox.radius, position.x);
-    //position.x = std::min(playground.left + playground.width - hitbox.radius, position.x);
+    position.x = std::max(playground.left + hitbox.radius, position.x);
+    position.x = std::min(playground.left + playground.width - hitbox.radius, position.x);
 
     position.y += speed * dt * sin(direction);
-    //position.y = std::max(playground.top + hitbox.radius, position.y);
-    //position.y = std::min(playground.top + playground.height - hitbox.radius, position.y);
+    position.y = std::max(playground.top + hitbox.radius, position.y);
+    position.y = std::min(playground.top + playground.height - hitbox.radius, position.y);
 
     direction = fmod(direction + angular_speed * dt, 2 * physics::pi);
   }

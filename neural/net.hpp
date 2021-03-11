@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#include <ltl/operator.h>
-#include <ltl/Tuple.h>
+#include "ltl/operator.h"
+#include "ltl/Tuple.h"
 
 /*******************************************************************************
 *******************************************************************************/
