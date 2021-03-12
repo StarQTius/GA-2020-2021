@@ -32,14 +32,14 @@ struct AssignementAwareInteger {
 
 };
 
-TEST_CASE("gate::sort_candidates") {
+TEST_CASE("genetics::sort_candidates") {
 
   std::list<int> int_l {0, 9, 5, 1, 8, 4, 3, 2, 7, 6};
 
   SECTION("La fonction 'sort_candidates' range un intervalle d'éléments ayant"
           " un score de fitness par ordre décroissant") {
 
-    auto fitness = gate::sort_candidates(int_l, [](int val){ return val; });
+    auto fitness = genetics::sort_candidates(int_l, [](int val){ return val; });
     REQUIRE(int_l == std::list<int> {9, 8, 7, 6, 5, 4, 3, 2, 1, 0});
     REQUIRE(fitness == std::vector<int> {9, 8, 7, 6, 5, 4, 3, 2, 1, 0});
 
@@ -50,7 +50,7 @@ TEST_CASE("gate::sort_candidates") {
 
   SECTION("La fonction 'sort_candidates' ne fait aucune copie") {
 
-    gate::sort_candidates(asg_aware_int_l,
+    genetics::sort_candidates(asg_aware_int_l,
       [](const auto& asg_aware_int) {
         return asg_aware_int.content;
       });
@@ -60,7 +60,7 @@ TEST_CASE("gate::sort_candidates") {
 
 }
 
-TEST_CASE("gate::crossover_uniform") {
+TEST_CASE("genetics::crossover_uniform") {
 
   std::list<bool> false_l(1e4, false);
   std::list<bool> true_l(1e4, true);
@@ -71,14 +71,14 @@ TEST_CASE("gate::crossover_uniform") {
           " aléatoire obtenue est atypique : dans ce cas, il faut réexecuter"
           " le test)") {
 
-    gate::crossover_uniform(false_l, true_l);
+    genetics::crossover_uniform(false_l, true_l);
     CHECK(abs(ltl::count(false_l, true) - 5e3) <= 2e3);
 
   }
 
 }
 
-TEST_CASE("gate::mutate") {
+TEST_CASE("genetics::mutate") {
 
   std::list<bool> bool_l(1e4, false);
 
@@ -88,7 +88,7 @@ TEST_CASE("gate::mutate") {
           " aléatoire obtenue est atypique : dans ce cas, il faut réexecuter"
           " le test)") {
 
-    gate::mutate(bool_l, 0.5,
+    genetics::mutate(bool_l, 0.5,
       [](bool& value, auto&& rnd_engine) {
         value = true;
       });

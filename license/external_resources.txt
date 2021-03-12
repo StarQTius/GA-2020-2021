@@ -1,0 +1,2 @@
+External resources :
+-Little-Type-Library (A little metaprogramming and functional library) : https://github.com/qnope/Little-Type-Library

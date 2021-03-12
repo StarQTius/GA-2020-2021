@@ -29,7 +29,7 @@ void display(sf::RenderWindow& render_window, entt::registry& registry) {
   sf::Text angular_speed_text;
   sf::Text distance_text;
   sf::Font font;
-  font.loadFromFile("../font.ttf");
+  font.loadFromFile("asset/font.ttf");
   speed_text.setFont(font);
   angular_speed_text.setFont(font);
   distance_text.setFont(font);
